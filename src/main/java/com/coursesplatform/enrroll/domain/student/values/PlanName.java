@@ -4,11 +4,11 @@ import com.coursesplatform.enrroll.generic.ValueObject;
 
 import java.util.Objects;
 
-public class PlanCategory implements ValueObject<String> {
+public class PlanName implements ValueObject <String> {
 
     private String value;
 
-    public PlanCategory(String value) {
+    public PlanName(String value) {
         this.value = Objects.requireNonNull(value);
     }
 

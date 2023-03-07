@@ -1,10 +1,10 @@
-package com.coursesplatform.enrroll.domain.student.values;
+package com.coursesplatform.enrroll.domain.course.values;
 
 import com.coursesplatform.enrroll.generic.ValueObject;
 
 import java.util.Objects;
 
-public class Status implements ValueObject<String> {
+public class Status implements ValueObject <String> {
 
     private String value;
 
