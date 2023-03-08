@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class CreateInstructorManager extends Command {
+public class CreateInstructorManagerCommand extends Command {
 
     private String instructorManagerID;
 

@@ -10,8 +10,10 @@ import java.util.List;
 import java.util.Map;
 
 public class StudentManager extends AggregateRoot <StudentManagerID> {
-    protected Map <Student, Plan> students;
+    protected Map <StudentID, Plan> studentPlan;
+    protected List<Student> students;
 
+    //TODO: should be private?
     public StudentManager (StudentManagerID entityID) {
         super (entityID);
         subscribe(new StudentManagerChange (this));

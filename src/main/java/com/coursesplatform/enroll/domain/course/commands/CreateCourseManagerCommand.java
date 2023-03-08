@@ -6,6 +6,6 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class CreateCourseManager extends Command {
+public class CreateCourseManagerCommand extends Command {
     private String courseManagerID;
 }
