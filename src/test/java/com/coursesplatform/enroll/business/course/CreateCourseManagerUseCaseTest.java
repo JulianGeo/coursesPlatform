@@ -1,6 +1,9 @@
-package com.coursesplatform.enroll.business.student;
+package com.coursesplatform.enroll.business.course;
 
 import com.coursesplatform.enroll.business.commons.EventsRepository;
+import com.coursesplatform.enroll.business.student.CreateStudentManagerUseCase;
+import com.coursesplatform.enroll.domain.course.commands.CreateCourseManagerCommand;
+import com.coursesplatform.enroll.domain.course.events.CourseManagerCreated;
 import com.coursesplatform.enroll.domain.student.commands.CreateStudentManagerCommand;
 import com.coursesplatform.enroll.domain.student.events.StudentManagerCreated;
 import com.coursesplatform.enroll.generic.DomainEvent;
@@ -18,34 +21,34 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-class CreateStudentManagerUseCaseTest {
+class CreateCourseManagerUseCaseTest {
 
 
     @Mock
     private EventsRepository eventsRepository;
-    private CreateStudentManagerUseCase createStudentManagerUseCase;
+    private CreateCourseManagerUseCase createCourseManagerUseCase;
 
     @BeforeEach
     void setup(){
-        createStudentManagerUseCase = new CreateStudentManagerUseCase(eventsRepository);
+        createCourseManagerUseCase = new CreateCourseManagerUseCase(eventsRepository);
     }
 
     @Test
     void successfulScenario(){
 
-        CreateStudentManagerCommand createStudentManagerCommand = new CreateStudentManagerCommand("StudentManagerID");
-        StudentManagerCreated studentManagerCreated = new StudentManagerCreated();
-        studentManagerCreated.setAggregateRootId("StudentManagerID");
+        CreateCourseManagerCommand createCourseManagerCommand = new CreateCourseManagerCommand("CourseManagerID");
+        CourseManagerCreated courseManagerCreated = new CourseManagerCreated();
+        courseManagerCreated.setAggregateRootId("CourseManagerID");
 
-        Mockito.when(eventsRepository.saveEvent(ArgumentMatchers.any(StudentManagerCreated.class)))
+        Mockito.when(eventsRepository.saveEvent(ArgumentMatchers.any(CourseManagerCreated.class)))
                 .thenAnswer(invocationOnMock -> {
                     return invocationOnMock.getArgument(0);
                 });
 
-        List<DomainEvent> domainEventList = createStudentManagerUseCase.apply(createStudentManagerCommand);
+        List<DomainEvent> domainEventList = createCourseManagerUseCase.apply(createCourseManagerCommand);
 
         Assertions.assertEquals(1,domainEventList.size());
-        Assertions.assertEquals("StudentManagerID",domainEventList.get(0).aggregateRootId());
+        Assertions.assertEquals("CourseManagerID",domainEventList.get(0).aggregateRootId());
 
     }
 }

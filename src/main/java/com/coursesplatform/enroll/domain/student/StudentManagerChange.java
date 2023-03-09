@@ -34,7 +34,7 @@ public class StudentManagerChange extends EventChange {
 
         apply((StudentUnregistered event) -> {
             Student studentToRemove = studentManager.students.stream()
-                    .filter(student -> student.identity().equals(event.getStudentID()))
+                    .filter(student -> student.identity().equals(StudentID.of(event.getStudentID())))
                     .findFirst()
                     .orElseThrow();
             studentManager.students.remove(studentToRemove);
@@ -42,14 +42,14 @@ public class StudentManagerChange extends EventChange {
 
         apply((StudentEnrolled event) -> {
             Student student=studentManager.students.stream()
-                    .filter(studentFiltered -> studentFiltered.identity().equals(event.getStudentID()))
+                    .filter(studentFiltered -> studentFiltered.identity().equals(StudentID.of(event.getStudentID())))
                     .findFirst().orElseThrow();
             student.enroll(EnrollmentID.of(event.getEnrollmentID()));
         });
 
         apply((StudentUnenrolled event) -> {
             Student student=studentManager.students.stream()
-                    .filter(studentFiltered -> studentFiltered.identity().equals(event.getStudentID()))
+                    .filter(studentFiltered -> studentFiltered.identity().equals(StudentID.of(event.getStudentID())))
                     .findFirst().orElseThrow();
             student.unenroll(EnrollmentID.of(event.getEnrollmentID()));
         });

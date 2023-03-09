@@ -61,6 +61,4 @@ public class StudentManager extends AggregateRoot <StudentManagerID> {
         appendChange(new StudentUnenrolled(studentID, enrollmentID, courseManagerID)).apply();
     }
 
-
-
 }
