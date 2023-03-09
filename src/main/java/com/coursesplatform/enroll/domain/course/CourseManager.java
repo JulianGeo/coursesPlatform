@@ -2,6 +2,7 @@ package com.coursesplatform.enroll.domain.course;
 
 import com.coursesplatform.enroll.domain.course.events.CourseManagerCreated;
 import com.coursesplatform.enroll.domain.course.events.StudentEnrolledFromStudent;
+import com.coursesplatform.enroll.domain.course.events.StudentUnenrolledFromStudent;
 import com.coursesplatform.enroll.domain.course.values.CourseManagerID;
 import com.coursesplatform.enroll.domain.student.events.StudentEnrolled;
 import com.coursesplatform.enroll.generic.AggregateRoot;
@@ -26,11 +27,16 @@ public class CourseManager extends AggregateRoot<CourseManagerID> {
         events.forEach(event -> courseManager.applyEvent(event));
         return courseManager;
     }
+
     public void enrollStudent(String studentID, String enrollmentID, String courseID) {
         //TODO: are these requireNonNull needed?
         Objects.requireNonNull(studentID);
         Objects.requireNonNull(enrollmentID);
         Objects.requireNonNull(courseID);
         appendChange(new StudentEnrolledFromStudent(studentID, enrollmentID, courseID)).apply();
+    }
+    public void unenenrollStudent(String enrollmentID) {
+        Objects.requireNonNull(enrollmentID);
+        appendChange(new StudentUnenrolledFromStudent(enrollmentID)).apply();
     }
 }

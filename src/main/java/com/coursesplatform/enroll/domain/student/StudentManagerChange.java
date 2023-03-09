@@ -2,9 +2,7 @@ package com.coursesplatform.enroll.domain.student;
 
 import com.coursesplatform.enroll.domain.course.values.EnrollmentID;
 import com.coursesplatform.enroll.domain.sharedValues.*;
-import com.coursesplatform.enroll.domain.student.events.StudentEnrolled;
-import com.coursesplatform.enroll.domain.student.events.StudentManagerCreated;
-import com.coursesplatform.enroll.domain.student.events.StudentRegistered;
+import com.coursesplatform.enroll.domain.student.events.*;
 import com.coursesplatform.enroll.domain.student.values.PlanID;
 import com.coursesplatform.enroll.domain.student.values.PlanName;
 import com.coursesplatform.enroll.domain.student.values.StudentID;
@@ -34,12 +32,29 @@ public class StudentManagerChange extends EventChange {
 
         });
 
+        apply((StudentUnregistered event) -> {
+            Student studentToRemove = studentManager.students.stream()
+                    .filter(student -> student.identity().equals(event.getStudentID()))
+                    .findFirst()
+                    .orElseThrow();
+            studentManager.students.remove(studentToRemove);
+        });
+
         apply((StudentEnrolled event) -> {
             Student student=studentManager.students.stream()
-                            .filter(studentFiltered -> studentFiltered.identity().equals(event.getStudentID()))
-                            .findFirst().orElseThrow();
+                    .filter(studentFiltered -> studentFiltered.identity().equals(event.getStudentID()))
+                    .findFirst().orElseThrow();
             student.enroll(EnrollmentID.of(event.getEnrollmentID()));
         });
+
+        apply((StudentUnenrolled event) -> {
+            Student student=studentManager.students.stream()
+                    .filter(studentFiltered -> studentFiltered.identity().equals(event.getStudentID()))
+                    .findFirst().orElseThrow();
+            student.unenroll(EnrollmentID.of(event.getEnrollmentID()));
+        });
+
+
     }
 
 

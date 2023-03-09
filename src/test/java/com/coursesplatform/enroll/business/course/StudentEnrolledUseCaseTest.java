@@ -43,17 +43,14 @@ class StudentEnrolledUseCaseTest {
         //Mocking events related with the aggregateRoot retrieved from DB
         List<DomainEvent> courseManagerEvents = new ArrayList<>();
         courseManagerEvents.add(new CourseManagerCreated());
-
-        //Mocking the output event related with enrolling a student in the Course Aggregate
-        StudentEnrolledFromStudent studentEnrolledFromStudent = new StudentEnrolledFromStudent("StudentID", "EnrollmentID", "CourseID");
-        studentEnrolledFromStudent.setAggregateRootId("CourseManagerID");
-
-
+        
         Mockito.when(eventsRepository.findByAggregatedRootId(ArgumentMatchers.any(String.class)))
                 .thenReturn(courseManagerEvents);
 
         Mockito.when(eventsRepository.saveEvent(ArgumentMatchers.any(DomainEvent.class)))
-                .thenReturn(studentEnrolledFromStudent);
+                .thenAnswer( invocationOnMock -> {
+                    return invocationOnMock.getArgument(0);
+                });
 
 
         //Action

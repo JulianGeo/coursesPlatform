@@ -3,25 +3,25 @@ package com.coursesplatform.enroll.business.student;
 import com.coursesplatform.enroll.business.commons.EventsRepository;
 import com.coursesplatform.enroll.business.commons.UseCaseForCommand;
 import com.coursesplatform.enroll.domain.student.StudentManager;
-import com.coursesplatform.enroll.domain.student.commands.CreateStudentManagerCommand;
+import com.coursesplatform.enroll.domain.student.commands.UnregisterStudentCommand;
 import com.coursesplatform.enroll.domain.student.values.StudentManagerID;
 import com.coursesplatform.enroll.generic.DomainEvent;
 
 import java.util.List;
 
-public class CreateStudentManagerUseCase implements UseCaseForCommand <CreateStudentManagerCommand> {
-
+public class UnregisterStudentUseCase implements UseCaseForCommand<UnregisterStudentCommand> {
     private final EventsRepository eventsRepository;
 
-    public CreateStudentManagerUseCase(EventsRepository eventsRepository) {
+    public UnregisterStudentUseCase(EventsRepository eventsRepository) {
         this.eventsRepository = eventsRepository;
     }
 
     @Override
-    public List <DomainEvent> apply(CreateStudentManagerCommand command) {
+    public List<DomainEvent> apply(UnregisterStudentCommand command) {
+        List<DomainEvent> studentEvents =  eventsRepository.findByAggregatedRootId(command.getStudentManagerID());
+        StudentManager studentManager=StudentManager.from(StudentManagerID.of((command.getStudentManagerID())), studentEvents);
 
-        StudentManager studentManager = new StudentManager (StudentManagerID.of(command.getStudentManagerID()));
+        studentManager.unregisterStudent(command.getStudentID());
         return studentManager.getUncommittedChanges().stream().map(event->eventsRepository.saveEvent(event)).toList();
     }
 }
-
