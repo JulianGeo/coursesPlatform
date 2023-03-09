@@ -8,8 +8,8 @@ public class Status implements ValueObject <String> {
 
     private String value;
 
-    public Status(String value) {
-        this.value = Objects.requireNonNull(value);
+    public Status() {
+        this.value = "Active";
     }
 
     @Override

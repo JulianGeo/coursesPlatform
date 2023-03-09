@@ -23,7 +23,7 @@ public class CreateStudentManagerUseCase implements UseCaseForCommand <CreateStu
     @Override
     public List <DomainEvent> apply(CreateStudentManagerCommand command) {
 
-        StudentManager studentManager = new StudentManager (StudentManagerID.of(command.getStudentManagerID ()));
+        StudentManager studentManager = new StudentManager (StudentManagerID.of(command.getStudentManagerID()));
         return studentManager.getUncommittedChanges().stream().map(event->eventsRepository.saveEvent(event)).toList();
     }
 }

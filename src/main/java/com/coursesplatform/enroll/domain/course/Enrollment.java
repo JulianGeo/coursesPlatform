@@ -7,6 +7,8 @@ import com.coursesplatform.enroll.domain.sharedValues.Date;
 import com.coursesplatform.enroll.domain.student.values.StudentID;
 import com.coursesplatform.enroll.generic.Entity;
 
+import java.time.LocalDate;
+
 public class Enrollment extends Entity<EnrollmentID> {
 
     private Date enrollmentDate;
@@ -14,10 +16,10 @@ public class Enrollment extends Entity<EnrollmentID> {
     private StudentID studentID;
     private CourseID courseID;
 
-    public Enrollment (EnrollmentID entityID, Date enrollmentDate, Status enrollmentStatus, StudentID studentID, CourseID courseID) {
+    public Enrollment (EnrollmentID entityID, StudentID studentID, CourseID courseID) {
         super (entityID);
-        this.enrollmentDate=enrollmentDate;
-        this.enrollmentStatus=enrollmentStatus;
+        this.enrollmentDate=new Date(LocalDate.now());
+        this.enrollmentStatus=new Status();
         this.studentID=studentID;
         this.courseID=courseID;
     }
