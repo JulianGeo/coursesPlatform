@@ -11,7 +11,7 @@ The big picture is related to the online course platform company as the domain, 
 
 ### Bounded context and Ubiquitous language
 A bounded context was identified for the development of the application, which involves the sales and the people subdomains. As shown in the image bellow, inside the bounded context (blue rectangle) are allocated the main entities identified, where student, instructor and course are the aggregate roots for this solution. In the second image, the behaviors of these entities are shows, where the blue ones, with an "event" name, are highlighted since they are behaviors that depend on the behaviors of another aggregate root, and then, they are implemented in the event driven use cases.
-<img src="resources/BoundedContext.png" width="800" alt="Big Picture">
+<img src="resources/Boundedcontext.png" width="800" alt="Big Picture">
 <img src="resources/Actions.png" width="800" alt="Big Picture">
 
 ### Domain model
