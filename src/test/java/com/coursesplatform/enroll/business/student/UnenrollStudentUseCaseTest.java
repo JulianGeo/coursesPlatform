@@ -2,9 +2,10 @@ package com.coursesplatform.enroll.business.student;
 
 import com.coursesplatform.enroll.business.commons.EventsRepository;
 import com.coursesplatform.enroll.domain.student.commands.EnrollStudentCommand;
-import com.coursesplatform.enroll.domain.student.commands.RegisterStudentCommand;
+import com.coursesplatform.enroll.domain.student.commands.UnenrollStudentCommand;
 import com.coursesplatform.enroll.domain.student.events.StudentEnrolled;
 import com.coursesplatform.enroll.domain.student.events.StudentRegistered;
+import com.coursesplatform.enroll.domain.student.events.StudentUnenrolled;
 import com.coursesplatform.enroll.generic.DomainEvent;
 import com.coursesplatform.enroll.utils.MocksGenerator;
 import org.junit.jupiter.api.Assertions;
@@ -21,17 +22,16 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-//TODO: this doesnt work yet
 @ExtendWith(MockitoExtension.class)
-class EnrollStudentUseCaseTest {
+class UnenrollStudentUseCaseTest {
 
     @Mock
     private EventsRepository eventsRepository;
-    private EnrollStudentUseCase enrollStudentUseCase;
+    private UnenrollStudentUseCase unenrollStudentUseCase;
 
     @BeforeEach
     void setup(){
-        enrollStudentUseCase = new EnrollStudentUseCase(eventsRepository);
+        unenrollStudentUseCase = new UnenrollStudentUseCase(eventsRepository);
     }
 
 
@@ -41,7 +41,10 @@ class EnrollStudentUseCaseTest {
         StudentRegistered studentRegistered = MocksGenerator.studentRegistered();
         studentRegistered.setAggregateRootId("StudentID");
 
-        EnrollStudentCommand enrollStudentCommand = new EnrollStudentCommand(
+        StudentEnrolled studentEnrolled = new StudentEnrolled("EnrollmentID", "CourseID");
+        studentEnrolled.setAggregateRootId("StudentID");
+
+        UnenrollStudentCommand unenrollStudentCommand = new UnenrollStudentCommand(
                 "StudentID",
                 "EnrollmentID",
                 "CourseID"
@@ -50,6 +53,7 @@ class EnrollStudentUseCaseTest {
         //Mocking events related with the aggregateRoot retrieved from DB
         List<DomainEvent> studentEvents = new ArrayList<>();
         studentEvents.add(studentRegistered);
+        studentEvents.add(studentEnrolled);
 
 
         Mockito.when(eventsRepository.findByAggregatedRootId(ArgumentMatchers.any(String.class)))
@@ -60,13 +64,11 @@ class EnrollStudentUseCaseTest {
                     return invocationOnMock.getArgument(0);
                 });
 
-        List<DomainEvent> domainEventList = enrollStudentUseCase.apply(enrollStudentCommand);
+        List<DomainEvent> domainEventList = unenrollStudentUseCase.apply(unenrollStudentCommand);
 
         Assertions.assertEquals(1,domainEventList.size());
         Assertions.assertEquals("EnrollmentID",
-                ((StudentEnrolled)domainEventList.get(0)).getEnrollmentID());
+                ((StudentUnenrolled)domainEventList.get(0)).getEnrollmentID());
 
     }
-
-
 }

@@ -3,7 +3,6 @@ package com.coursesplatform.enroll.business.student;
 import com.coursesplatform.enroll.business.commons.EventsRepository;
 import com.coursesplatform.enroll.business.commons.UseCaseForCommand;
 import com.coursesplatform.enroll.domain.student.Student;
-import com.coursesplatform.enroll.domain.student.commands.EnrollStudentCommand;
 import com.coursesplatform.enroll.domain.student.commands.UpdatePasswordCommand;
 import com.coursesplatform.enroll.domain.student.values.StudentID;
 import com.coursesplatform.enroll.generic.DomainEvent;

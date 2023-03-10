@@ -3,6 +3,7 @@ package com.coursesplatform.enroll.business.course;
 import com.coursesplatform.enroll.business.commons.EventsRepository;
 import com.coursesplatform.enroll.domain.course.commands.ChangeDescriptionCommand;
 import com.coursesplatform.enroll.domain.course.events.CourseCreated;
+import com.coursesplatform.enroll.domain.course.events.DescriptionChanged;
 import com.coursesplatform.enroll.domain.student.events.StudentEnrolled;
 import com.coursesplatform.enroll.generic.DomainEvent;
 import com.coursesplatform.enroll.utils.MocksGenerator;
@@ -55,14 +56,11 @@ class ChangeDescriptionUseCaseTest {
                     return invocationOnMock.getArgument(0);
                 });
 
-
         //Action
         List<DomainEvent> domainEventList = changeDescriptionUseCase.apply(changeDescriptionCommand);
 
-        Assertions.assertEquals(2,domainEventList.size());
-        //Assertions.assertTrue(domainEventList.size()>1);
-        Assertions.assertEquals("CourseID",
-                ((domainEventList.get(domainEventList.size()-1))).type);
+        Assertions.assertEquals(1,domainEventList.size());
+        Assertions.assertEquals("New description",
+                (((DescriptionChanged)domainEventList.get(0))).getDescription());
     }
-
 }

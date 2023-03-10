@@ -1,10 +1,11 @@
-package com.coursesplatform.enroll.business.course;
+package com.coursesplatform.enroll.business.instructor;
 
 import com.coursesplatform.enroll.business.commons.EventsRepository;
-import com.coursesplatform.enroll.domain.course.events.CourseCreated;
-import com.coursesplatform.enroll.domain.course.events.StudentEnrolledFromStudent;
-import com.coursesplatform.enroll.domain.course.events.StudentUnenrolledFromStudent;
-import com.coursesplatform.enroll.domain.student.events.StudentEnrolled;
+import com.coursesplatform.enroll.domain.instructor.commands.MakeAvailableCommand;
+import com.coursesplatform.enroll.domain.instructor.commands.UpdatePasswordICommand;
+import com.coursesplatform.enroll.domain.instructor.events.AvailableMade;
+import com.coursesplatform.enroll.domain.instructor.events.InstructorRegistered;
+import com.coursesplatform.enroll.domain.instructor.events.PasswordIUpdated;
 import com.coursesplatform.enroll.generic.DomainEvent;
 import com.coursesplatform.enroll.utils.MocksGenerator;
 import org.junit.jupiter.api.Assertions;
@@ -19,35 +20,33 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-class StudentEnrolledUseCaseTest {
-
-
+class MakeAvailableUseCaseTest {
     @Mock
     private EventsRepository eventsRepository;
-    private StudentEnrolledUseCase studentEnrolledUseCase;
+    private MakeAvailableUseCase makeAvailableUseCase;
 
     @BeforeEach
     void setup(){
-        studentEnrolledUseCase = new StudentEnrolledUseCase(eventsRepository);
+        makeAvailableUseCase = new MakeAvailableUseCase(eventsRepository);
     }
+
 
     @Test
     void successfulScenario() {
 
         //Mocking the course creation event
-        CourseCreated courseCreated = MocksGenerator.courseCreated();
-        courseCreated.setAggregateRootId("CourseID");
+        InstructorRegistered instructorRegistered = MocksGenerator.instructorRegistered();
+        instructorRegistered.setAggregateRootId("InstructorID");
 
-        //Mocking the input event of the event driven use case
-        StudentEnrolled studentEnrolled = new StudentEnrolled( "EnrollmentID", "CourseID");
-        studentEnrolled.setAggregateRootId("StudentID");
+        //Mocking the input command of the event driven use case
+        MakeAvailableCommand makeAvailableCommand = new MakeAvailableCommand("InstructorID",true);
 
         //Mocking events related with the aggregateRoot retrieved from DB
         List<DomainEvent> courseEvents = new ArrayList<>();
-        courseEvents.add(courseCreated);
-
+        courseEvents.add(instructorRegistered);
 
         Mockito.when(eventsRepository.findByAggregatedRootId(ArgumentMatchers.any(String.class)))
                 .thenReturn(courseEvents);
@@ -58,15 +57,11 @@ class StudentEnrolledUseCaseTest {
                 });
 
         //Action
-        List<DomainEvent> domainEventList = studentEnrolledUseCase.apply(studentEnrolled);
+        List<DomainEvent> domainEventList = makeAvailableUseCase.apply(makeAvailableCommand);
 
         Assertions.assertEquals(1,domainEventList.size());
-        Assertions.assertEquals("EnrollmentID",
-                ((StudentEnrolledFromStudent)(domainEventList.get(0))).getEnrollmentID());
+        Assertions.assertEquals(true,
+                (((AvailableMade)domainEventList.get(0))).isAvailable());
     }
 
 }
-
-
-
-

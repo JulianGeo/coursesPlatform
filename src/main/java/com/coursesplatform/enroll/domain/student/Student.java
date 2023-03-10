@@ -22,8 +22,8 @@ public class Student extends AggregateRoot<StudentID> {
     protected Plan plan;
     protected Set<EnrollmentID> enrollments;
 
-    public Student(StudentID entityID) {
 
+    private Student(StudentID entityID) {
         super(entityID);
         subscribe(new StudentChange(this));
     }
@@ -88,14 +88,12 @@ public class Student extends AggregateRoot<StudentID> {
     }*/
 
     public void enrollStudent(String enrollmentID, String courseID) {
-        //TODO: are these requireNonNull needed?
         Objects.requireNonNull(enrollmentID);
         Objects.requireNonNull(courseID);
         appendChange(new StudentEnrolled(enrollmentID, courseID)).apply();
     }
 
     public void unenrollStudent(String enrollmentID, String courseID) {
-        //TODO: are these requireNonNull needed?
         Objects.requireNonNull(enrollmentID);
         Objects.requireNonNull(courseID);
         appendChange(new StudentUnenrolled(enrollmentID, courseID)).apply();

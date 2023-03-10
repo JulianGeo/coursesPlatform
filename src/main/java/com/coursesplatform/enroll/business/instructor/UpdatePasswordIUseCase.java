@@ -5,16 +5,13 @@ import com.coursesplatform.enroll.business.commons.UseCaseForCommand;
 import com.coursesplatform.enroll.domain.instructor.Instructor;
 import com.coursesplatform.enroll.domain.instructor.commands.UpdatePasswordICommand;
 import com.coursesplatform.enroll.domain.instructor.values.InstructorID;
-import com.coursesplatform.enroll.domain.student.Student;
-import com.coursesplatform.enroll.domain.student.commands.UpdatePasswordCommand;
-import com.coursesplatform.enroll.domain.student.values.StudentID;
 import com.coursesplatform.enroll.generic.DomainEvent;
 
 import java.util.List;
 
-public class UpdatePasswordUseCase implements UseCaseForCommand<UpdatePasswordICommand> {
+public class UpdatePasswordIUseCase implements UseCaseForCommand<UpdatePasswordICommand> {
     private final EventsRepository eventsRepository;
-    public UpdatePasswordUseCase(EventsRepository eventsRepository) {
+    public UpdatePasswordIUseCase(EventsRepository eventsRepository) {
         this.eventsRepository = eventsRepository;
     }
 

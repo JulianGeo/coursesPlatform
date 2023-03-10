@@ -1,10 +1,9 @@
-package com.coursesplatform.enroll.business.course;
+package com.coursesplatform.enroll.business.student;
 
 import com.coursesplatform.enroll.business.commons.EventsRepository;
-import com.coursesplatform.enroll.domain.course.events.CourseCreated;
-import com.coursesplatform.enroll.domain.course.events.StudentEnrolledFromStudent;
-import com.coursesplatform.enroll.domain.course.events.StudentUnenrolledFromStudent;
-import com.coursesplatform.enroll.domain.student.events.StudentEnrolled;
+import com.coursesplatform.enroll.domain.student.commands.UpdatePasswordCommand;
+import com.coursesplatform.enroll.domain.student.events.PasswordUpdated;
+import com.coursesplatform.enroll.domain.student.events.StudentRegistered;
 import com.coursesplatform.enroll.generic.DomainEvent;
 import com.coursesplatform.enroll.utils.MocksGenerator;
 import org.junit.jupiter.api.Assertions;
@@ -19,35 +18,32 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
-class StudentEnrolledUseCaseTest {
-
-
+class UpdatePasswordUseCaseTest {
     @Mock
     private EventsRepository eventsRepository;
-    private StudentEnrolledUseCase studentEnrolledUseCase;
+    private UpdatePasswordUseCase updatePasswordUseCase;
 
     @BeforeEach
     void setup(){
-        studentEnrolledUseCase = new StudentEnrolledUseCase(eventsRepository);
+        updatePasswordUseCase = new UpdatePasswordUseCase(eventsRepository);
     }
+
 
     @Test
     void successfulScenario() {
 
         //Mocking the course creation event
-        CourseCreated courseCreated = MocksGenerator.courseCreated();
-        courseCreated.setAggregateRootId("CourseID");
+        StudentRegistered studentRegistered = MocksGenerator.studentRegistered();
+        studentRegistered.setAggregateRootId("StudentID");
 
-        //Mocking the input event of the event driven use case
-        StudentEnrolled studentEnrolled = new StudentEnrolled( "EnrollmentID", "CourseID");
-        studentEnrolled.setAggregateRootId("StudentID");
+        //Mocking the input command of the event driven use case
+        UpdatePasswordCommand updatePasswordCommand = new UpdatePasswordCommand( "StudentID", "New password");
 
         //Mocking events related with the aggregateRoot retrieved from DB
         List<DomainEvent> courseEvents = new ArrayList<>();
-        courseEvents.add(courseCreated);
-
+        courseEvents.add(studentRegistered);
 
         Mockito.when(eventsRepository.findByAggregatedRootId(ArgumentMatchers.any(String.class)))
                 .thenReturn(courseEvents);
@@ -58,15 +54,13 @@ class StudentEnrolledUseCaseTest {
                 });
 
         //Action
-        List<DomainEvent> domainEventList = studentEnrolledUseCase.apply(studentEnrolled);
+        List<DomainEvent> domainEventList = updatePasswordUseCase.apply(updatePasswordCommand);
 
         Assertions.assertEquals(1,domainEventList.size());
-        Assertions.assertEquals("EnrollmentID",
-                ((StudentEnrolledFromStudent)(domainEventList.get(0))).getEnrollmentID());
+        Assertions.assertEquals("New password",
+                (((PasswordUpdated)domainEventList.get(0))).getPassword());
     }
 
+
+
 }
-
-
-
-
