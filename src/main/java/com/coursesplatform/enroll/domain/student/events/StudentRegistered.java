@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 public class StudentRegistered extends DomainEvent {
 
-    private String studentID;
     private String name;
     private String personalID;
     private String email;
@@ -21,15 +20,24 @@ public class StudentRegistered extends DomainEvent {
 
 
 
-    public StudentRegistered (String studentID, String name, String personalID, String email, String phone, String user, String password) {
+    public StudentRegistered (
+            String name,
+            String personalID,
+            String email,
+            String phone,
+            String user,
+            String password,
+            String planID,
+            String planName) {
         super ("enroll.studentRegistered");
-        this.studentID=studentID;
         this.name=name;
         this.personalID=personalID;
         this.email=email;
         this.phone=phone;
         this.user=user;
         this.password=password;
+        this.planID=planID;
+        this.planName=planName;
     }
 
 }

@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 public class UnregisterStudentCommand extends Command {
 
     private String studentID;
-    private String studentManagerID;
+
 
 }

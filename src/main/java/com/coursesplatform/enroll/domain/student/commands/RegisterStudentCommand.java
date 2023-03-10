@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RegisterStudentCommand extends Command {
 
-    private String studentManagerID;
     private String studentID;
     private String name;
     private String personalID;

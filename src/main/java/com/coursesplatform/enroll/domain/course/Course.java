@@ -1,25 +1,41 @@
 package com.coursesplatform.enroll.domain.course;
 
+import com.coursesplatform.enroll.domain.course.events.CourseCreated;
+import com.coursesplatform.enroll.domain.course.events.StudentEnrolledFromStudent;
+import com.coursesplatform.enroll.domain.course.events.StudentUnenrolledFromStudent;
 import com.coursesplatform.enroll.domain.course.values.CourseID;
 import com.coursesplatform.enroll.domain.course.values.Description;
 import com.coursesplatform.enroll.domain.instructor.values.InstructorID;
-import com.coursesplatform.enroll.generic.Entity;
+import com.coursesplatform.enroll.generic.AggregateRoot;
+import com.coursesplatform.enroll.generic.DomainEvent;
 
 import java.util.List;
+import java.util.Objects;
 
-public class Course extends Entity <CourseID> {
+public class Course extends AggregateRoot<CourseID> {
 
-    private InstructorID instructorID;
-    private Description description;
-    private List <Review> reviews;
-    private List<Rating> ratings;
+    protected InstructorID instructorID;
+    protected Description description;
+    protected List <Review> reviews;
+    protected List<Rating> ratings;
+    protected List <Enrollment> enrollments;
 
-    public Course (CourseID entityID, InstructorID instructorID, Description description, List <Review> reviews, List <Rating> ratings) {
-        super (entityID);
+    private Course(CourseID entityID) {
+        super(entityID);
+    }
+
+    public Course(CourseID entityID, InstructorID instructorID, Description description){
+        super(entityID);
         this.instructorID=instructorID;
         this.description=description;
-        this.reviews=reviews;
-        this.ratings=ratings;
+        subscribe(new CourseChange(this));
+        appendChange(new CourseCreated(instructorID.value(), description.value())).apply();
+    }
+
+    public static Course from(CourseID aggregateID, List<DomainEvent> events){
+        Course course = new Course(aggregateID);
+        events.forEach(event -> course.applyEvent(event));
+        return course;
     }
 
     public InstructorID instructorID () {
@@ -36,5 +52,21 @@ public class Course extends Entity <CourseID> {
 
     public List <Rating> ratings () {
         return ratings;
+    }
+
+    public List<Enrollment> enrollments() {
+        return enrollments;
+    }
+
+    public void enrollStudent(String studentID, String enrollmentID, String courseID) {
+        //TODO: are these requireNonNull needed?
+        Objects.requireNonNull(studentID);
+        Objects.requireNonNull(enrollmentID);
+        Objects.requireNonNull(courseID);
+        appendChange(new StudentEnrolledFromStudent(studentID, enrollmentID)).apply();
+    }
+    public void unenenrollStudent(String enrollmentID) {
+        Objects.requireNonNull(enrollmentID);
+        appendChange(new StudentUnenrolledFromStudent(enrollmentID)).apply();
     }
 }

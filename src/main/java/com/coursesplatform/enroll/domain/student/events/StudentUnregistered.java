@@ -3,7 +3,7 @@ package com.coursesplatform.enroll.domain.student.events;
 import com.coursesplatform.enroll.generic.DomainEvent;
 import lombok.Getter;
 import lombok.Setter;
-
+/*
 @Getter
 @Setter
 public class StudentUnregistered extends DomainEvent {
@@ -14,3 +14,4 @@ public class StudentUnregistered extends DomainEvent {
         this.studentID=studentID;
     }
 }
+*/

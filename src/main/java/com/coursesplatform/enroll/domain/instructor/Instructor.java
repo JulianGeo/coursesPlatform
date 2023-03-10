@@ -1,6 +1,6 @@
 package com.coursesplatform.enroll.domain.instructor;
 
-import com.coursesplatform.enroll.domain.instructor.events.InstructorManagerCreated;
+import com.coursesplatform.enroll.domain.instructor.events.InstructorRegistered;
 import com.coursesplatform.enroll.domain.instructor.values.Availability;
 import com.coursesplatform.enroll.domain.instructor.values.InstructorID;
 import com.coursesplatform.enroll.domain.sharedValues.Account;
@@ -19,13 +19,29 @@ public class Instructor extends AggregateRoot<InstructorID> {
     protected List<Rating> ratings;
 
 
-    public Instructor (InstructorID entityID, Account account, Data personalData, Availability availability, List <Review> reviews, List <Rating> ratings) {
+    public Instructor(InstructorID id) {
+        super(id);
+    }
+
+    public Instructor (InstructorID entityID, Account account, Data personalData) {
         super (entityID);
         this.account=account;
         this.personalData=personalData;
-        this.availability=availability;
-        this.reviews=reviews;
-        this.ratings=ratings;
+        this.availability = new Availability(false);
+        subscribe(new InstructorChange(this));
+        appendChange(new InstructorRegistered(
+                personalData.value().name().value(),
+                personalData.value().personalID().value(),
+                personalData.value().email().value(),
+                personalData.value().phone().value(),
+                account.value().user().value(),
+                account.value().password().value())).apply();
+    }
+
+    public static Instructor from(InstructorID id, List <DomainEvent> events){
+        Instructor instructor = new Instructor(id);
+        events.forEach(event -> instructor.applyEvent(event));
+        return instructor;
     }
 
     public Account account () {

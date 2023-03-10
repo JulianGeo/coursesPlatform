@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateCourseManagerCommand extends Command {
-    private String courseManagerID;
+public class CreateCourseCommand extends Command {
+    private String courseID;
+    private String instructorID;
+    private String description;
 }

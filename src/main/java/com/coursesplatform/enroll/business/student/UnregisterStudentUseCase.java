@@ -2,13 +2,12 @@ package com.coursesplatform.enroll.business.student;
 
 import com.coursesplatform.enroll.business.commons.EventsRepository;
 import com.coursesplatform.enroll.business.commons.UseCaseForCommand;
-import com.coursesplatform.enroll.domain.student.StudentManager;
 import com.coursesplatform.enroll.domain.student.commands.UnregisterStudentCommand;
 import com.coursesplatform.enroll.domain.student.values.StudentManagerID;
 import com.coursesplatform.enroll.generic.DomainEvent;
 
 import java.util.List;
-
+/* TODO: implements deleting from the DB
 public class UnregisterStudentUseCase implements UseCaseForCommand<UnregisterStudentCommand> {
     private final EventsRepository eventsRepository;
 
@@ -24,4 +23,4 @@ public class UnregisterStudentUseCase implements UseCaseForCommand<UnregisterStu
         studentManager.unregisterStudent(command.getStudentID());
         return studentManager.getUncommittedChanges().stream().map(event->eventsRepository.saveEvent(event)).toList();
     }
-}
+}*/

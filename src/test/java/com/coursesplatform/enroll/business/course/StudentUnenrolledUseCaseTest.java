@@ -1,8 +1,7 @@
 package com.coursesplatform.enroll.business.course;
 
 import com.coursesplatform.enroll.business.commons.EventsRepository;
-import com.coursesplatform.enroll.domain.course.events.CourseManagerCreated;
-import com.coursesplatform.enroll.domain.course.events.StudentEnrolledFromStudent;
+import com.coursesplatform.enroll.domain.course.events.CourseCreated;
 import com.coursesplatform.enroll.domain.student.events.StudentEnrolled;
 import com.coursesplatform.enroll.domain.student.events.StudentUnenrolled;
 import com.coursesplatform.enroll.generic.DomainEvent;
@@ -17,8 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class StudentUnenrolledUseCaseTest {
@@ -36,12 +33,14 @@ class StudentUnenrolledUseCaseTest {
     void successfulScenario() {
 
         //Mocking the input event of the event driven use case
-        StudentUnenrolled studentUnenrolled = new StudentUnenrolled("StudentID", "EnrollmentID", "CourseManagerID");
+        StudentUnenrolled studentUnenrolled = new StudentUnenrolled("EnrollmentID", "CourseID");
 
         //Mocking events related with the aggregateRoot retrieved from DB
         List<DomainEvent> courseManagerEvents = new ArrayList<>();
-        courseManagerEvents.add(new CourseManagerCreated());
-        courseManagerEvents.add(new StudentEnrolled("StudentID", "EnrollmentID", "CourseManagerID", "CourseID"));
+        CourseCreated courseCreated = new CourseCreated("InstructorID", "Description");
+        courseCreated.setAggregateRootId("CourseID");
+        courseManagerEvents.add(courseCreated);
+        courseManagerEvents.add(new StudentEnrolled("EnrollmentID","CourseID"));
 
 
         Mockito.when(eventsRepository.findByAggregatedRootId(ArgumentMatchers.any(String.class)))

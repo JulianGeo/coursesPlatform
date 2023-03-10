@@ -10,9 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UnenrollStudentCommand extends Command {
 
-    private String studentManagerID;
     private String studentID;
     private String enrollmentID;
-    private String courseManagerID;
+    private String courseID;
 
 }

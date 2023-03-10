@@ -7,18 +7,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class StudentUnenrolled extends DomainEvent {
-
-    private String studentID;
     private String enrollmentID;
-    private String courseManagerID;
+    private String courseID;
 
     public StudentUnenrolled(
-            String studentID,
             String enrollmentID,
-            String courseManagerID) {
+            String courseID) {
         super("enroll.StudentUnenrolled");
-        this.studentID=studentID;
         this.enrollmentID=enrollmentID;
-        this.courseManagerID=courseManagerID;
+        this.courseID=courseID;
     }
 }

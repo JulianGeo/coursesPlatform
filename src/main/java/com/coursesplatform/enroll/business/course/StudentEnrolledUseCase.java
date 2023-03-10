@@ -2,8 +2,8 @@ package com.coursesplatform.enroll.business.course;
 
 import com.coursesplatform.enroll.business.commons.EventsRepository;
 import com.coursesplatform.enroll.business.commons.UseCaseForEvent;
-import com.coursesplatform.enroll.domain.course.CourseManager;
-import com.coursesplatform.enroll.domain.course.values.CourseManagerID;
+import com.coursesplatform.enroll.domain.course.Course;
+import com.coursesplatform.enroll.domain.course.values.CourseID;
 import com.coursesplatform.enroll.domain.student.events.StudentEnrolled;
 import com.coursesplatform.enroll.generic.DomainEvent;
 
@@ -20,10 +20,9 @@ public class StudentEnrolledUseCase implements UseCaseForEvent<StudentEnrolled> 
     @Override
     public List<DomainEvent> apply(StudentEnrolled event) {
 
-        List<DomainEvent> courseEvents =  eventsRepository.findByAggregatedRootId(event.getCourseManagerID());
-        CourseManager courseManager=CourseManager.from(CourseManagerID.of((event.getCourseManagerID())), courseEvents);
-        courseManager.enrollStudent(event.getStudentID(), event.getEnrollmentID(), event.getCourseID());
-        return courseManager.getUncommittedChanges().stream().map(eventUncommitted->eventsRepository.saveEvent(eventUncommitted)).toList();
-
+        List<DomainEvent> courseEvents =  eventsRepository.findByAggregatedRootId(event.getCourseID());
+        Course course=Course.from(CourseID.of((event.getCourseID())), courseEvents);
+        course.enrollStudent(event.aggregateRootId(), event.getEnrollmentID(), event.getCourseID());
+        return course.getUncommittedChanges().stream().map(eventUncommitted->eventsRepository.saveEvent(eventUncommitted)).toList();
     }
 }
