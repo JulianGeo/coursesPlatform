@@ -3,16 +3,13 @@ package com.coursesplatform.enroll.business.course;
 import com.coursesplatform.enroll.business.commons.EventsRepository;
 import com.coursesplatform.enroll.business.commons.UseCaseForCommand;
 import com.coursesplatform.enroll.domain.course.Course;
-import com.coursesplatform.enroll.domain.course.commands.ChangeDescription;
+import com.coursesplatform.enroll.domain.course.commands.ChangeDescriptionCommand;
 import com.coursesplatform.enroll.domain.course.values.CourseID;
-import com.coursesplatform.enroll.domain.instructor.Instructor;
-import com.coursesplatform.enroll.domain.instructor.commands.UpdatePasswordICommand;
-import com.coursesplatform.enroll.domain.instructor.values.InstructorID;
 import com.coursesplatform.enroll.generic.DomainEvent;
 
 import java.util.List;
 
-public class ChangeDescriptionUseCase implements UseCaseForCommand<ChangeDescription> {
+public class ChangeDescriptionUseCase implements UseCaseForCommand<ChangeDescriptionCommand> {
 
     private final EventsRepository eventsRepository;
     public ChangeDescriptionUseCase(EventsRepository eventsRepository){
@@ -20,7 +17,7 @@ public class ChangeDescriptionUseCase implements UseCaseForCommand<ChangeDescrip
     }
 
     @Override
-    public List<DomainEvent> apply(ChangeDescription command) {
+    public List<DomainEvent> apply(ChangeDescriptionCommand command) {
         List<DomainEvent> courseEvents =  eventsRepository.findByAggregatedRootId(command.getCourseID());
         Course course=Course.from(CourseID.of((command.getCourseID())), courseEvents);
         course.changeDescription(command.getDescription());

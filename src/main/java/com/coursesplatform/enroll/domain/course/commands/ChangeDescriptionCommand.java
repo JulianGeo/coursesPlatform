@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChangeDescription extends Command {
+public class ChangeDescriptionCommand extends Command {
     private String courseID;
     private String description;
 }

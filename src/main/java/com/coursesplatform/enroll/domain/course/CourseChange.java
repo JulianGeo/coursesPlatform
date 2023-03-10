@@ -7,6 +7,7 @@ import com.coursesplatform.enroll.domain.course.events.StudentUnenrolledFromStud
 import com.coursesplatform.enroll.domain.course.values.CourseID;
 import com.coursesplatform.enroll.domain.course.values.Description;
 import com.coursesplatform.enroll.domain.course.values.EnrollmentID;
+import com.coursesplatform.enroll.domain.instructor.values.InstructorID;
 import com.coursesplatform.enroll.domain.student.values.StudentID;
 import com.coursesplatform.enroll.generic.EventChange;
 
@@ -16,6 +17,8 @@ public class CourseChange extends EventChange {
 
     public CourseChange(Course course) {
         apply ((CourseCreated event) -> {
+            course.instructorID = InstructorID.of(event.getInstructorID());
+            course.description = new Description(event.getDescription());
             course.enrollments = new ArrayList<> ();
             course.ratings = new ArrayList<> ();
             course.reviews  = new ArrayList<> ();

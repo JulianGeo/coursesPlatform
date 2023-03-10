@@ -17,7 +17,13 @@ public class StudentChange extends EventChange {
 
     public StudentChange(Student student) {
         apply((StudentRegistered event) -> {
-
+            student.account=new Account(new User(event.getUser()), new Password(event.getPassword()));
+            student.personalData = new Data(
+                    new PersonalID(event.getPersonalID()),
+                    new Name(event.getName()),
+                    new Email(event.getEmail()),
+                    new Phone(event.getPhone()));
+            student.plan=new Plan(PlanID.of(event.getPlanID()), new PlanName(event.getPlanName()), StudentID.of(event.aggregateRootId()));
             student.enrollments=new HashSet<>();
         });
 

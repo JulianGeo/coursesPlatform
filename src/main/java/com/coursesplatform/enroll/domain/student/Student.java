@@ -1,5 +1,6 @@
 package com.coursesplatform.enroll.domain.student;
 
+import com.coursesplatform.enroll.domain.course.CourseChange;
 import com.coursesplatform.enroll.domain.course.values.EnrollmentID;
 import com.coursesplatform.enroll.domain.sharedValues.Account;
 import com.coursesplatform.enroll.domain.sharedValues.Data;
@@ -22,7 +23,9 @@ public class Student extends AggregateRoot<StudentID> {
     protected Set<EnrollmentID> enrollments;
 
     public Student(StudentID entityID) {
+
         super(entityID);
+        subscribe(new StudentChange(this));
     }
 
     public Student (

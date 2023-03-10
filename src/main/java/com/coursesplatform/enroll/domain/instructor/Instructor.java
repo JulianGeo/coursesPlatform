@@ -8,6 +8,7 @@ import com.coursesplatform.enroll.domain.instructor.values.Availability;
 import com.coursesplatform.enroll.domain.instructor.values.InstructorID;
 import com.coursesplatform.enroll.domain.sharedValues.Account;
 import com.coursesplatform.enroll.domain.sharedValues.Data;
+import com.coursesplatform.enroll.domain.student.StudentChange;
 import com.coursesplatform.enroll.domain.student.events.PasswordUpdated;
 import com.coursesplatform.enroll.generic.AggregateRoot;
 import com.coursesplatform.enroll.generic.DomainEvent;
@@ -25,7 +26,9 @@ public class Instructor extends AggregateRoot<InstructorID> {
 
 
     public Instructor(InstructorID id) {
+
         super(id);
+        subscribe(new InstructorChange(this));
     }
 
     public Instructor (InstructorID entityID, Account account, Data personalData) {

@@ -23,6 +23,7 @@ public class Course extends AggregateRoot<CourseID> {
 
     private Course(CourseID entityID) {
         super(entityID);
+        subscribe(new CourseChange(this));
     }
 
     public Course(CourseID entityID, InstructorID instructorID, Description description){
