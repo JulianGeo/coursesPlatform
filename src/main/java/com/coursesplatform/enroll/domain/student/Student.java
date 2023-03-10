@@ -98,6 +98,11 @@ public class Student extends AggregateRoot<StudentID> {
         appendChange(new StudentUnenrolled(enrollmentID, courseID)).apply();
     }
 
+    public void changePassword(String newPassword){
+        Objects.requireNonNull(newPassword);
+        appendChange(new PasswordUpdated(newPassword)).apply();
+    }
+
 
 
 

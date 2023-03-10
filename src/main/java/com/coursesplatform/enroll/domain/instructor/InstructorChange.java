@@ -2,6 +2,7 @@ package com.coursesplatform.enroll.domain.instructor;
 
 import com.coursesplatform.enroll.domain.instructor.events.AvailableMade;
 import com.coursesplatform.enroll.domain.instructor.events.InstructorRegistered;
+import com.coursesplatform.enroll.domain.instructor.events.PasswordIUpdated;
 import com.coursesplatform.enroll.domain.instructor.events.UnavailableMade;
 import com.coursesplatform.enroll.domain.instructor.values.Availability;
 import com.coursesplatform.enroll.domain.sharedValues.Account;
@@ -27,9 +28,11 @@ public class InstructorChange extends EventChange {
             instructor.availability = new Availability(event.isAvailable());
         });
 
-        apply((PasswordUpdated event) -> {
+        apply((PasswordIUpdated event) -> {
             Account oldAccount = instructor.account;
-            instructor.account =  new Account(oldAccount.value().user(), new Password(event.))
+            instructor.account =  new Account(
+                    oldAccount.value().user(),
+                    new Password(event.getPassword()));
         });
 
 

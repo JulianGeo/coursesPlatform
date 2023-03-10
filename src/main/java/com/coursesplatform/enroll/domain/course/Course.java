@@ -1,6 +1,7 @@
 package com.coursesplatform.enroll.domain.course;
 
 import com.coursesplatform.enroll.domain.course.events.CourseCreated;
+import com.coursesplatform.enroll.domain.course.events.DescriptionChanged;
 import com.coursesplatform.enroll.domain.course.events.StudentEnrolledFromStudent;
 import com.coursesplatform.enroll.domain.course.events.StudentUnenrolledFromStudent;
 import com.coursesplatform.enroll.domain.course.values.CourseID;
@@ -68,5 +69,10 @@ public class Course extends AggregateRoot<CourseID> {
     public void unenenrollStudent(String enrollmentID) {
         Objects.requireNonNull(enrollmentID);
         appendChange(new StudentUnenrolledFromStudent(enrollmentID)).apply();
+    }
+
+    public void changeDescription(String newDescription){
+        Objects.requireNonNull(newDescription);
+        appendChange(new DescriptionChanged(newDescription)).apply();
     }
 }

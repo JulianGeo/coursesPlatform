@@ -1,4 +1,4 @@
-package com.coursesplatform.enroll.domain.student.commands;
+package com.coursesplatform.enroll.domain.course.commands;
 
 import com.coursesplatform.enroll.generic.Command;
 import lombok.AllArgsConstructor;
@@ -8,8 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdatePasswordCommand extends Command {
-
-    private String studentID;
-    private String password;
+public class ChangeDescription extends Command {
+    private String courseID;
+    private String description;
 }

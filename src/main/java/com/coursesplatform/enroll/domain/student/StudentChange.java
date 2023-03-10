@@ -1,6 +1,7 @@
 package com.coursesplatform.enroll.domain.student;
 
 import com.coursesplatform.enroll.domain.course.values.EnrollmentID;
+import com.coursesplatform.enroll.domain.instructor.events.PasswordIUpdated;
 import com.coursesplatform.enroll.domain.sharedValues.*;
 import com.coursesplatform.enroll.domain.student.events.*;
 import com.coursesplatform.enroll.domain.student.values.PlanID;
@@ -37,6 +38,12 @@ public class StudentChange extends EventChange {
             student.unenroll(EnrollmentID.of(event.getEnrollmentID()));
         });
 
+        apply((PasswordUpdated event)-> {
+            Account oldAccount = student.account;
+            student.account =  new Account(
+                    oldAccount.value().user(),
+                    new Password(event.getPassword()));
+        });
 
     }
 
