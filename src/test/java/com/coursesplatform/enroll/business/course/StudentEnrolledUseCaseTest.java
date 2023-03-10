@@ -5,6 +5,7 @@ import com.coursesplatform.enroll.domain.course.events.CourseCreated;
 import com.coursesplatform.enroll.domain.course.events.StudentEnrolledFromStudent;
 import com.coursesplatform.enroll.domain.student.events.StudentEnrolled;
 import com.coursesplatform.enroll.generic.DomainEvent;
+import com.coursesplatform.enroll.utils.MocksGenerator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO: This doesnt work yet
 @ExtendWith(MockitoExtension.class)
 class StudentEnrolledUseCaseTest {
 
@@ -33,17 +35,21 @@ class StudentEnrolledUseCaseTest {
     @Test
     void successfulScenario() {
 
+        //Mocking the course creation event
+        CourseCreated courseCreated = MocksGenerator.courseCreated();
+        courseCreated.setAggregateRootId("CourseID");
+
         //Mocking the input event of the event driven use case
         StudentEnrolled studentEnrolled = new StudentEnrolled( "EnrollmentID", "CourseID");
+        studentEnrolled.setAggregateRootId("StudentID");
 
         //Mocking events related with the aggregateRoot retrieved from DB
-        List<DomainEvent> courseManagerEvents = new ArrayList<>();
-        CourseCreated courseCreated = new CourseCreated("InstructorID", "Description");
-        courseCreated.setAggregateRootId("CourseID");
-        courseManagerEvents.add(courseCreated);
+        List<DomainEvent> courseEvents = new ArrayList<>();
+        courseEvents.add(courseCreated);
+
 
         Mockito.when(eventsRepository.findByAggregatedRootId(ArgumentMatchers.any(String.class)))
-                .thenReturn(courseManagerEvents);
+                .thenReturn(courseEvents);
 
         Mockito.when(eventsRepository.saveEvent(ArgumentMatchers.any(DomainEvent.class)))
                 .thenAnswer( invocationOnMock -> {
@@ -54,10 +60,10 @@ class StudentEnrolledUseCaseTest {
         //Action
         List<DomainEvent> domainEventList = studentEnrolledUseCase.apply(studentEnrolled);
 
-        Assertions.assertEquals(2,domainEventList.size());
-        Assertions.assertTrue(domainEventList.size()>1);
-        //Assertions.assertEquals("CourseID",
-               // ((StudentEnrolledFromStudent)(domainEventList.get(domainEventList.size()-1))).get());
+        Assertions.assertEquals(1,domainEventList.size());
+        //Assertions.assertTrue(domainEventList.size()>1);
+        Assertions.assertEquals("CourseID",
+                ((domainEventList.get(domainEventList.size()-1))).type);
     }
 
 }

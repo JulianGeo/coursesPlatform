@@ -10,7 +10,6 @@ public class StudentEnrolledFromStudent extends DomainEvent {
 
     private String studentID;
     private String enrollmentID;
-    private String studentManagerID;
 
     public StudentEnrolledFromStudent(String studentID, String enrollmentID) {
         super("enroll.studentEnrolledFromStudent");

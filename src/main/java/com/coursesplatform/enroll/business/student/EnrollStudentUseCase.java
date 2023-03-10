@@ -18,8 +18,8 @@ public class EnrollStudentUseCase implements UseCaseForCommand<EnrollStudentComm
 
     @Override
     public List<DomainEvent> apply(EnrollStudentCommand command) {
-        List<DomainEvent> userEvents =  eventsRepository.findByAggregatedRootId(command.getStudentID());
-        Student student=Student.from(StudentID.of((command.getStudentID())), userEvents);
+        List<DomainEvent> studentEvents =  eventsRepository.findByAggregatedRootId(command.getStudentID());
+        Student student=Student.from(StudentID.of((command.getStudentID())), studentEvents);
         student.enrollStudent(command.getEnrollmentID(), command.getCourseID());
         return student.getUncommittedChanges().stream().map(event->eventsRepository.saveEvent(event)).toList();
     }
