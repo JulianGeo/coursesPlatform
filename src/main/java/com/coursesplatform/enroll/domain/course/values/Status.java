@@ -12,6 +12,10 @@ public class Status implements ValueObject <String> {
         this.value = "Active";
     }
 
+    public Status(String status) {
+        this.value = status;
+    }
+
     @Override
     public String value() {
         return value;

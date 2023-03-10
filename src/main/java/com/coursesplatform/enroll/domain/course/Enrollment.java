@@ -32,6 +32,10 @@ public class Enrollment extends Entity<EnrollmentID> {
         return enrollmentStatus;
     }
 
+    public void finishCourse() {
+        this.enrollmentStatus=new Status("Finished");
+    }
+
     public StudentID studentID () {
         return studentID;
     }
@@ -39,4 +43,6 @@ public class Enrollment extends Entity<EnrollmentID> {
     public CourseID courseID () {
         return courseID;
     }
+
+
 }

@@ -44,6 +44,10 @@ class UnenrollStudentUseCaseTest {
         StudentEnrolled studentEnrolled = new StudentEnrolled("EnrollmentID", "CourseID");
         studentEnrolled.setAggregateRootId("StudentID");
 
+        StudentEnrolled studentEnrolled2 = new StudentEnrolled("EnrollmentID2", "CourseID");
+        studentEnrolled.setAggregateRootId("StudentID");
+
+
         UnenrollStudentCommand unenrollStudentCommand = new UnenrollStudentCommand(
                 "StudentID",
                 "EnrollmentID",
@@ -54,6 +58,7 @@ class UnenrollStudentUseCaseTest {
         List<DomainEvent> studentEvents = new ArrayList<>();
         studentEvents.add(studentRegistered);
         studentEvents.add(studentEnrolled);
+        studentEvents.add(studentEnrolled2);
 
 
         Mockito.when(eventsRepository.findByAggregatedRootId(ArgumentMatchers.any(String.class)))

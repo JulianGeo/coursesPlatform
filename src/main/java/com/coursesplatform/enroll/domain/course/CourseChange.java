@@ -1,12 +1,10 @@
 package com.coursesplatform.enroll.domain.course;
 
-import com.coursesplatform.enroll.domain.course.events.CourseCreated;
-import com.coursesplatform.enroll.domain.course.events.DescriptionChanged;
-import com.coursesplatform.enroll.domain.course.events.StudentEnrolledFromStudent;
-import com.coursesplatform.enroll.domain.course.events.StudentUnenrolledFromStudent;
+import com.coursesplatform.enroll.domain.course.events.*;
 import com.coursesplatform.enroll.domain.course.values.CourseID;
 import com.coursesplatform.enroll.domain.course.values.Description;
 import com.coursesplatform.enroll.domain.course.values.EnrollmentID;
+import com.coursesplatform.enroll.domain.course.values.Status;
 import com.coursesplatform.enroll.domain.instructor.values.InstructorID;
 import com.coursesplatform.enroll.domain.student.values.StudentID;
 import com.coursesplatform.enroll.generic.EventChange;
@@ -41,6 +39,14 @@ public class CourseChange extends EventChange {
 
         apply ((DescriptionChanged event) -> {
             course.description = new Description(event.getDescription());
+        });
+
+        apply((CourseFinishedFromStudent event) -> {
+            Enrollment enrollment = course.enrollments.stream()
+                    .filter(enrollmentFiltered -> enrollmentFiltered
+                            .identity().value().equals(event.getEnrollmentID()))
+                    .findFirst().orElseThrow();
+            enrollment.finishCourse();
         });
     }
 

@@ -7,6 +7,7 @@ import com.coursesplatform.enroll.domain.course.events.StudentUnenrolledFromStud
 import com.coursesplatform.enroll.domain.student.events.StudentEnrolled;
 import com.coursesplatform.enroll.domain.student.events.StudentUnenrolled;
 import com.coursesplatform.enroll.generic.DomainEvent;
+import com.coursesplatform.enroll.utils.MocksGenerator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,24 +42,26 @@ class StudentUnenrolledUseCaseTest {
         //Mocking events related with the aggregateRoot retrieved from DB
         List<DomainEvent> courseManagerEvents = new ArrayList<>();
 
-        CourseCreated courseCreated = new CourseCreated("InstructorID", "Description");
+        CourseCreated courseCreated = MocksGenerator.courseCreated();
         courseCreated.setAggregateRootId("CourseID");
 
         StudentEnrolledFromStudent studentEnrolledFromStudent = new StudentEnrolledFromStudent( "StudentID", "EnrollmentID");
         studentEnrolledFromStudent.setAggregateRootId("CourseID");
 
+        StudentEnrolledFromStudent studentEnrolledFromStudent2 = new StudentEnrolledFromStudent( "StudentID2", "EnrollmentID2");
+        studentEnrolledFromStudent.setAggregateRootId("CourseID");
+
         courseManagerEvents.add(courseCreated);
         courseManagerEvents.add(studentEnrolledFromStudent);
-
+        courseManagerEvents.add(studentEnrolledFromStudent2);
 
         Mockito.when(eventsRepository.findByAggregatedRootId(ArgumentMatchers.any(String.class)))
                 .thenReturn(courseManagerEvents);
 
-        Mockito.when(eventsRepository.saveEvent(ArgumentMatchers.any(DomainEvent.class)))
+        Mockito.when(eventsRepository.saveEvent(ArgumentMatchers.any(StudentUnenrolledFromStudent.class)))
                 .thenAnswer( invocationOnMock -> {
                     return invocationOnMock.getArgument(0);
                 });
-
 
         //Action
         List<DomainEvent> domainEventList = studentUnenrolledUseCase.apply(studentUnenrolled);
@@ -66,8 +69,6 @@ class StudentUnenrolledUseCaseTest {
         Assertions.assertEquals(1,domainEventList.size());
         Assertions.assertEquals("EnrollmentID",
                 ((StudentUnenrolledFromStudent)(domainEventList.get(0))).getEnrollmentID());
-        //Assertions.assertEquals("enroll.studentUnenrolledFromStudent",
-               // ((StudentUnenrolled)(domainEventList.get(domainEventList.size()-1))).type);
     }
 
 }

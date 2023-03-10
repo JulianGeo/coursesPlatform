@@ -28,15 +28,6 @@ public class StudentChange extends EventChange {
             student.enrollments=new HashSet<>();
         });
 
-        /* TODO: this would be with a remove to the database
-        apply((StudentUnregistered event) -> {
-            Student studentToRemove = studentManager.students.stream()
-                    .filter(student -> student.identity().equals(StudentID.of(event.getStudentID())))
-                    .findFirst()
-                    .orElseThrow();
-            studentManager.students.remove(studentToRemove);
-        });*/
-
         apply((StudentEnrolled event) -> {
             student.enroll(EnrollmentID.of(event.getEnrollmentID()));
         });
@@ -50,6 +41,10 @@ public class StudentChange extends EventChange {
             student.account =  new Account(
                     oldAccount.value().user(),
                     new Password(event.getPassword()));
+        });
+
+        apply((CourseFinished event)-> {
+            student.unenroll(EnrollmentID.of(event.getEnrollmentID()));
         });
 
     }

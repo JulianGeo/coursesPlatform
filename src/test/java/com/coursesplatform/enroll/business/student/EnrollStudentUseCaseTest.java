@@ -55,7 +55,7 @@ class EnrollStudentUseCaseTest {
         Mockito.when(eventsRepository.findByAggregatedRootId(ArgumentMatchers.any(String.class)))
                 .thenReturn(studentEvents);
 
-        Mockito.when(eventsRepository.saveEvent(ArgumentMatchers.any(DomainEvent.class)))
+        Mockito.when(eventsRepository.saveEvent(ArgumentMatchers.any(StudentEnrolled.class)))
                 .thenAnswer(invocationOnMock -> {
                     return invocationOnMock.getArgument(0);
                 });
