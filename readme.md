@@ -16,7 +16,7 @@ A bounded context was identified for the development of the application, which i
 
 ### Domain model
 A domain model was developed for the enrollment application. The aggregate roots and its entities and main value objects are presented, as well as the relations between them.
-<img src="resources/DomainModel.png" width="800" alt="Big Picture">
+<img src="resources/mapdomain.jpg" width="800" alt="Big Picture">
 
 
 ### Use cases
